@@ -1,0 +1,28 @@
+#!/bin/bash
+#############################################################
+# Name:        Supportconfig Plugin for Salt
+# Description: Gathers minions status
+# License:     GPLv2
+# Author:      Bo Maryniuk <bo@suse.de>
+# Written:     2016 Oct 28
+#############################################################
+
+SVER=0.0.1
+RCFILE="/usr/lib/supportconfig/resources/scplugin.rc"
+
+[ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+
+section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+
+if ! rpm -q salt &>/dev/null; then
+  echo "ERROR: Salt package(s) not installed"
+  echo
+  exit 111
+fi
+
+# List of what minions are actually present according to the master
+plugin_command "salt-run manage.list_state"
+# ...and the opposite
+plugin_command "salt-run manage.list_not_state"
+# Joined minions
+plugin_command "salt-run manage.joined"
