@@ -13,7 +13,6 @@ for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
 done
 
-section_header "Supportconfig Plugin for SaltStack, v${SVER}"
-
 check_packages "salt" "salt-master"
+section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 plugin_command "salt-key -L"
