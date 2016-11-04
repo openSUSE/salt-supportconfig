@@ -1,0 +1,45 @@
+#!/bin/bash
+#############################################################
+# Name:        Supportconfig Plugin for Salt
+# Description: Extract Salt pillars
+# License:     GPLv2
+# Author:      Bo Maryniuk <bo@suse.de>
+# Written:     2016 Oct 28
+#############################################################
+
+SVER=0.0.1
+RCFILE="/usr/lib/supportconfig/resources/scplugin.rc"
+
+[ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+
+
+#
+# Get all pillars
+#
+function get_salt_master_pillars() {
+    for cfg_file in $(ls /etc/salt/master /etc/salt/master.d/*conf); do
+	for pillar_dir in $(python -c \
+            "import yaml;print ' '.join(yaml.load(open('$cfg_file')).get('pillar_roots', {}).get('base', []))"); do 
+	    if [ -d $pillar_dir ] && [ "$(ls -A $pillar_dir)" ]; then
+		for pillar_file in $(find $pillar_dir -type f); do
+		    echo "Content of the pillar $pillar_file:"
+		    echo "--------------------"
+		    cat $pillar_file
+		    echo -e "--------------------\n\n"
+		done
+	    fi
+	done
+    done
+}
+
+RPMS="salt salt-master"
+for pkg in $RPMS; do
+    if ! rpm -q $pkg &>/dev/null; then
+	echo "ERROR: Salt package \"$pkg\" is not installed"
+	echo
+	exit 111
+    fi
+done
+
+get_salt_master_pillars
