@@ -8,11 +8,12 @@
 #############################################################
 
 SVER=0.0.1
-RCFILE="/usr/lib/supportconfig/resources/scplugin.rc"
 
-[ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
+    [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+done
+
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
-
 
 #
 # Get all pillars
@@ -33,13 +34,5 @@ function get_salt_master_pillars() {
     done
 }
 
-RPMS="salt salt-master"
-for pkg in $RPMS; do
-    if ! rpm -q $pkg &>/dev/null; then
-	echo "ERROR: Salt package \"$pkg\" is not installed"
-	echo
-	exit 111
-    fi
-done
-
+check_packages "salt" "salt-master"
 get_salt_master_pillars

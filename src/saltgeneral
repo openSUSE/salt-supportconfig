@@ -9,20 +9,15 @@
 #############################################################
 
 SVER=0.0.1
-RCFILE="/usr/lib/supportconfig/resources/scplugin.rc"
 
-[ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
+    [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+done
 
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+check_packages "salt" "salt-master" "salt-api"
 
-if ! rpm -q salt &>/dev/null; then
-  echo "ERROR: Salt package(s) not installed"
-  echo
-  exit 111
-fi
-
-for i in "susemanager tomcat osa-dispatcher postgresql"
-do
+for i in "salt-master salt-api"; do
     plugin_command "systemctl status $i"
 done
 
