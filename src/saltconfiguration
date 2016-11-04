@@ -1,0 +1,32 @@
+#!/bin/bash
+#############################################################
+# Name:        Supportconfig Plugin for Salt
+# Description: List Salt jobs
+# License:     GPLv2
+# Author:      Bo Maryniuk <bo@suse.de>
+# Written:     2016 Oct 28
+#############################################################
+
+SVER=0.0.1
+
+for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
+    [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+done
+
+#
+# Get Salt config file.
+# Remove all the comments via parsing it.
+#
+function get_salt_config() {
+    cnf=$1
+    echo $(python -c "import yaml;print yaml.dump(yaml.load(open('$cnf')), default_flow_style=False)")
+}
+
+check_packages "salt"
+section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+
+for cfg_file in $(ls /etc/salt/* /etc/salt/master.d/*conf); do
+    if [ -f $cfg_file ]; then
+	echo "Content of the config: $cfg_file"
+    fi
+done
