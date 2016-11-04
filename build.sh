@@ -22,10 +22,17 @@ function prepare() {
     fi
 
     mkdir $target
+    mkdir $target/resources
+    cp src/pluginrc/* $target/resources
     cp src/salt* $target
     cp LICENSE $target
     cp VERSION $target
 
+    # Remove accident Emacs back files, so they won't appear in the package :-)
+    for data_file in $(find $target -name '*~'); do 
+	rm $data_file;
+    done
+    
     echo "Prepared $target"
 }
 
