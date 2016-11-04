@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function check_packages() {
+    RPMS=$1
+    for pkg in $RPMS; do
+	if ! rpm -q $pkg &>/dev/null; then
+	    echo "ERROR: Salt package \"$pkg\" is not installed"
+	    echo
+	    exit 111
+	fi
+    done
+}
+
