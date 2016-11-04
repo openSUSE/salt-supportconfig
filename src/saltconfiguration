@@ -25,7 +25,7 @@ function get_salt_config() {
 check_packages "salt"
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 
-for cfg_file in $(ls /etc/salt/* /etc/salt/master.d/*conf); do
+for cfg_file in $(ls /etc/salt/* /etc/salt/*.d/*conf); do
     if [ -f $cfg_file ]; then
 	echo "Content of the config: $cfg_file"
 	echo "--------------------------------"
