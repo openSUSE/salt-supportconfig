@@ -78,7 +78,7 @@ function main() {
 	>&2 echo 'Where is the "VERSION" file?.. Change directory to the root of the project!'
 	exit 1;
     fi
-    target="supportutils-plugins-salt-$(get_version)"
+    target="supportutils-plugin-salt-$(get_version)"
     prepare $target;
     tar_it_up $target;
     cleanup $target;
