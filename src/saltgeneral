@@ -19,8 +19,8 @@ for thisrpm in "salt" "salt-master" "salt-api" "salt-minion" "salt-syndic" "salt
     validate_rpm_if_installed $thisrpm
 done
 
-for i in "salt-master salt-api"; do
-    plugin_command "systemctl status $i"
+for i in "salt-master" "salt-api" "salt-minion"; do
+    plugin_command "rc$i status"
 done
 
 plugin_command "salt-run manage.versions"
