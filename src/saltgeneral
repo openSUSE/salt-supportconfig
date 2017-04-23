@@ -24,3 +24,11 @@ for i in "salt-master" "salt-api" "salt-minion"; do
 done
 
 plugin_command "salt-run manage.versions"
+
+if [ -e /etc/machine-id ]; then
+    pconf_files /etc/machine-id
+elif [ -e /var/lib/dbus/machine-id ]; then
+    pconf_files /var/lib/dbus/machine-id
+else
+    plugin_message "no machine id found"
+fi
