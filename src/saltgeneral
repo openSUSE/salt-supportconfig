@@ -18,7 +18,7 @@ section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 check_packages "salt" "salt-master" "salt-api"
 
 for i in "salt-master salt-api"; do
-    plugin_command "systemctl status $i"
+    plugin_command "systemctl --full status $i"
 done
 
 plugin_command "salt-run manage.versions"
