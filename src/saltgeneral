@@ -15,8 +15,9 @@ for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
 done
 
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
-for thisrpm in "salt" "salt-master" "salt-api" "salt-minion" "salt-syndic" "salt-proxy"; do
-    validate_rpm_if_installed $thisrpm
+for pkg_name in "salt" "salt-master" "salt-api" "salt-minion" "salt-syndic" "salt-proxy"; do
+    printf "#==[ Validating %-15s ]====================#\n" $pkg_name
+    validate_rpm_pkg $pkg_name
 done
 
 for i in "salt-master" "salt-api" "salt-minion"; do
