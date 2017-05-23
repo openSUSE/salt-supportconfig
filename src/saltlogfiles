@@ -1,0 +1,18 @@
+#!/bin/bash
+#############################################################
+# Name:        Supportconfig Plugin for Salt
+# Description: Salt logfiles
+# License:     GPLv2
+# Author:      Michael Calmer <mc@suse.de>
+# Written:     2017 Apr 23
+#############################################################
+
+SVER=0.0.1
+
+for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
+    [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
+done
+
+section_header "Supportconfig Plugin for Salt, v${SVER}"
+
+plog_files 1000 /var/log/salt/minion /var/log/salt/master /var/log/salt/key

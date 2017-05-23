@@ -11,3 +11,20 @@ function check_packages() {
     done
 }
 
+validate_rpm_if_installed() {
+    THISRPM=$1
+    echo "#==[ Validating RPM ]=================================#"
+    if rpm -q $THISRPM >/dev/null 2>&1; then
+        echo "# rpm -V $THISRPM"
+
+        if rpm -V $THISRPM; then
+            echo "Status: Passed"
+        else
+            echo "Status: WARNING"
+        fi
+    else
+        echo "package $THISRPM is not installed"
+        echo "Status: Skipped"
+    fi
+    echo
+}

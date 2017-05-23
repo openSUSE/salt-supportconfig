@@ -15,10 +15,20 @@ for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
 done
 
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
-check_packages "salt" "salt-master" "salt-api"
+for thisrpm in "salt" "salt-master" "salt-api" "salt-minion" "salt-syndic" "salt-proxy"; do
+    validate_rpm_if_installed $thisrpm
+done
 
-for i in "salt-master salt-api"; do
-    plugin_command "systemctl status $i"
+for i in "salt-master" "salt-api" "salt-minion"; do
+    plugin_command "rc$i status"
 done
 
 plugin_command "salt-run manage.versions"
+
+if [ -e /etc/machine-id ]; then
+    pconf_files /etc/machine-id
+elif [ -e /var/lib/dbus/machine-id ]; then
+    pconf_files /var/lib/dbus/machine-id
+else
+    plugin_message "no machine id found"
+fi
