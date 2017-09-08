@@ -24,8 +24,6 @@ for i in "salt-master" "salt-api" "salt-minion"; do
     plugin_command "rc$i status"
 done
 
-plugin_command "salt-run manage.versions"
-
 if [ -e /etc/machine-id ]; then
     pconf_files /etc/machine-id
 elif [ -e /var/lib/dbus/machine-id ]; then
