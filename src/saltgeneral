@@ -31,3 +31,5 @@ elif [ -e /var/lib/dbus/machine-id ]; then
 else
     plugin_message "no machine id found"
 fi
+
+plugin_command "salt-call --local grains.items"
