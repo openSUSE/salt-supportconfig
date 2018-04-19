@@ -15,4 +15,4 @@ done
 
 section_header "Supportconfig Plugin for Salt, v${SVER}"
 
-plog_files 1000 /var/log/salt/minion /var/log/salt/master /var/log/salt/key
+plog_files 1000 /var/log/salt/minion /var/log/salt/master /var/log/salt/key /var/log/salt/broker /var/log/salt/api /var/log/salt/ssh
