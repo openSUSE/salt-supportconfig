@@ -19,7 +19,18 @@ done
 #
 function get_salt_config() {
     cnf=$1
-    python -c "import yaml;print yaml.dump(yaml.load(open('$cnf')) or 'N/A', default_flow_style=False)"
+    if python3 -c "import yaml" 2>1; then
+        PYTHON=python3
+    elif python -c "import yaml" 2>1; then
+        PYTHON=python
+    elif python2 -c "import yaml" 2>1; then
+        PYTHON=python2
+    else
+        echo "Please install yaml for python."
+        return
+    fi
+
+    $PYTHON -c "import yaml;print(yaml.dump(yaml.safe_load(open('$cnf')) or 'N/A', default_flow_style=False))"
 }
 
 check_packages "salt"

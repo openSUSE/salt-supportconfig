@@ -17,9 +17,20 @@ done
 # Get all pillars
 #
 function get_salt_master_pillars() {
+    if python3 -c "import yaml" 2>1; then
+        PYTHON=python3
+    elif python -c "import yaml" 2>1; then
+        PYTHON=python
+    elif python2 -c "import yaml" 2>1; then
+        PYTHON=python2
+    else
+        echo "Please install yaml for python."
+        return
+    fi
+
     for cfg_file in $(ls /etc/salt/master /etc/salt/master.d/*conf); do
-	for pillar_dir in $(python -c \
-            "import yaml;print ' '.join(yaml.load(open('$cfg_file')).get('pillar_roots', {}).get('base', []))"); do 
+	for pillar_dir in $($PYTHON -c \
+            "import yaml;print(' '.join(yaml.safe_load(open('$cfg_file')).get('pillar_roots', {}).get('base', [])))"); do 
 	    if [ -d $pillar_dir ] && [ "$(ls -A $pillar_dir)" ]; then
 		for pillar_file in $(find $pillar_dir -type f); do
 		    echo "Content of the pillar $pillar_file:"
