@@ -1,17 +1,16 @@
 #!/bin/bash
 
 function check_packages() {
-    RPMS=$1
-    for pkg in $RPMS; do
-	if ! rpm -q $pkg &>/dev/null; then
-	    echo "ERROR: Salt package \"$pkg\" is not installed"
-	    echo
-	    exit 111
-	fi
+    for pkg in "$@"; do
+        if ! rpm -q $pkg 2> /dev/null; then
+            echo "ERROR: Salt package \"$pkg\" is not installed"
+            echo
+            exit 111
+        fi
     done
 }
 
-validate_rpm_pkg() {
+function validate_rpm_pkg() {
     OUT=$(rpm -V $1 2>&1)
     [[ $? == 0 ]] && echo "Status: Passed" || echo "Status: $OUT"
 }
