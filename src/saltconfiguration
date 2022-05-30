@@ -19,7 +19,9 @@ done
 #
 function get_salt_config() {
     cnf=$1
-    if python3 -c "import yaml" 2>1; then
+    if /usr/lib/venv-salt-minion/bin/python3 -c "import yaml" 2>1; then
+        PYTHON=/usr/lib/venv-salt-minion/bin/python3
+    elif python3 -c "import yaml" 2>1; then
         PYTHON=python3
     elif python -c "import yaml" 2>1; then
         PYTHON=python
@@ -33,10 +35,10 @@ function get_salt_config() {
     $PYTHON -c "import yaml;print(yaml.dump(yaml.safe_load(open('$cnf')) or 'N/A', default_flow_style=False))"
 }
 
-check_packages "salt"
+check_packages "salt" || check_packages_failhard "venv-salt-minion"
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 
-for cfg_file in $(ls /etc/salt/* /etc/salt/*.d/*conf); do
+for cfg_file in $(ls /etc/salt/* /etc/salt/*.d/*conf /etc/venv-salt-minion/* /etc/venv-salt-minion/*.d/*conf); do
     if [ -f $cfg_file ]; then
 	echo "Content of the config: $cfg_file"
 	echo "--------------------------------"
