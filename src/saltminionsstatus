@@ -13,7 +13,7 @@ for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
 done
 
-check_packages "salt" "salt-master"
+check_packages_failhard "salt" "salt-master"
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 
 # List of what minions are actually present according to the master
