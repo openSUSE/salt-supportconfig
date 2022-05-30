@@ -43,6 +43,6 @@ function get_salt_master_pillars() {
     done
 }
 
-check_packages "salt" "salt-master"
+check_packages_failhard "salt" "salt-master"
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
 get_salt_master_pillars

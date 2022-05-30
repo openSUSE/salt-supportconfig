@@ -5,9 +5,15 @@ function check_packages() {
         if ! rpm -q $pkg 2> /dev/null; then
             echo "ERROR: Salt package \"$pkg\" is not installed"
             echo
-            exit 111
+            return 1
         fi
     done
+}
+
+function check_packages_failhard() {
+    if ! check_packages $1; then
+        exit 111
+    fi
 }
 
 function validate_rpm_pkg() {

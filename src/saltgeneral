@@ -15,12 +15,12 @@ for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
 done
 
 section_header "Supportconfig Plugin for SaltStack, v${SVER}"
-for pkg_name in "salt" "salt-master" "salt-api" "salt-minion" "salt-syndic" "salt-proxy"; do
+for pkg_name in "salt" "salt-master" "salt-api" "salt-minion" "venv-salt-minion" "salt-syndic" "salt-proxy"; do
     printf "#==[ Validating %-15s ]====================#\n" $pkg_name
     validate_rpm_pkg $pkg_name
 done
 
-for i in "salt-master" "salt-api" "salt-minion"; do
+for i in "salt-master" "salt-api" "salt-minion" "venv-salt-minion"; do
     plugin_command "rc$i status"
 done
 
@@ -32,4 +32,8 @@ else
     plugin_message "no machine id found"
 fi
 
-plugin_command "salt-call --local grains.items"
+if [ -e /usr/bin/venv-salt-call ]; then
+    plugin_command "venv-salt-call --local grains.items"
+else
+    plugin_command "salt-call --local grains.items"
+fi
