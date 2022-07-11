@@ -11,7 +11,7 @@ function check_packages() {
 }
 
 function check_packages_failhard() {
-    if ! check_packages $1; then
+    if ! check_packages "$@"; then
         exit 111
     fi
 }
