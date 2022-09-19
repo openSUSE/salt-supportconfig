@@ -32,7 +32,10 @@ function get_salt_config() {
         return
     fi
 
-    $PYTHON -c "import yaml;print(yaml.dump(yaml.safe_load(open('$cnf')) or 'N/A', default_flow_style=False))"
+    OUTPUT=$($PYTHON -c "import yaml;print(yaml.dump(yaml.safe_load(open('$cnf')) or 'N/A', default_flow_style=False))")
+
+    # Remove possible passwords
+    echo "$OUTPUT" | sed -e 's/\(.*pass:\).*/\1 *REMOVED BY SUPPORTCONFIG*/g;s/\(.*password:\).*/\1 *REMOVED BY SUPPORTCONFIG*/g'
 }
 
 check_packages "salt" || check_packages_failhard "venv-salt-minion"
