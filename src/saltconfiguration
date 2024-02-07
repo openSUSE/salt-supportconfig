@@ -7,7 +7,8 @@
 # Written:     2016 Oct 28
 #############################################################
 
-SVER=0.0.1
+SVER=0.1.0
+OF="plugin-saltconfiguration.txt"
 
 for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
@@ -39,7 +40,7 @@ function get_salt_config() {
 }
 
 check_packages "salt" || check_packages_failhard "venv-salt-minion"
-section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+log_entry $OF "Supportconfig Plugin for SaltStack, v${SVER}"
 
 for cfg_file in $(ls /etc/salt/* /etc/salt/*.d/*conf /etc/venv-salt-minion/* /etc/venv-salt-minion/*.d/*conf); do
     if [ -f $cfg_file ]; then

@@ -7,7 +7,8 @@
 # Written:     2016 Oct 28
 #############################################################
 
-SVER=0.0.1
+SVER=0.1.0
+OF="plugin-saltmasterpillars.txt"
 
 for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
@@ -44,5 +45,5 @@ function get_salt_master_pillars() {
 }
 
 check_packages_failhard "salt" "salt-master"
-section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+log_entry $OF "Supportconfig Plugin for SaltStack, v${SVER}"
 get_salt_master_pillars

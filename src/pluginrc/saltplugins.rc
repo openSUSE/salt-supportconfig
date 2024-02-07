@@ -20,3 +20,43 @@ function validate_rpm_pkg() {
     OUT=$(rpm -V $1 2>&1)
     [[ $? == 0 ]] && echo "Status: Passed" || echo "Status: $OUT"
 }
+
+#
+# Define compatibility functions with old systems (SLE12)
+#
+# If new function isn't defined, each function discards
+# the output file, and passes the rest of arguments to 
+# the equivalent old function. Otherwise, new function
+# is assumed to be correctly defined as per the
+# supportconfig.rc file
+#
+
+if [[ ! $(type -t log_entry) == function ]]; then
+    function log_entry() {
+        section_header "${@:2}"
+    }
+fi
+
+if [[ ! $(type -t log_cmd) == function ]]; then
+    function log_cmd() {
+        plugin_command "${@:2}"
+    }
+fi
+
+if [[ ! $(type -t log_write) == function ]]; then
+    function log_write() {
+        plugin_message "${@:2}"
+    }
+fi
+
+if [[ ! $(type -t conf_files) == function ]]; then
+    function conf_files() {
+        pconf_files "${@:2}"
+    }
+fi
+
+if [[ ! $(type -t log_files) == function ]]; then
+    function conf_files() {
+        plog_files "${@:2}"
+    }
+fi
