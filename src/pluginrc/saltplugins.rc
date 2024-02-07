@@ -56,7 +56,7 @@ if [[ ! $(type -t conf_files) == function ]]; then
 fi
 
 if [[ ! $(type -t log_files) == function ]]; then
-    function conf_files() {
+    function log_files() {
         plog_files "${@:2}"
     }
 fi
