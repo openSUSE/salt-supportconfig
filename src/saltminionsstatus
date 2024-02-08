@@ -7,18 +7,19 @@
 # Written:     2016 Oct 28
 #############################################################
 
-SVER=0.0.1
+SVER=0.1.0
+OF="plugin-saltminionsstatus.txt"
 
 for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
 done
 
 check_packages_failhard "salt" "salt-master"
-section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+log_entry $OF "Supportconfig Plugin for SaltStack, v${SVER}"
 
 # List of what minions are actually present according to the master
-plugin_command "salt-run manage.list_state"
+log_cmd $OF "salt-run manage.list_state"
 # ...and the opposite
-plugin_command "salt-run manage.list_not_state"
+log_cmd $OF "salt-run manage.list_not_state"
 # Joined minions
-plugin_command "salt-run manage.joined"
+log_cmd $OF "salt-run manage.joined"

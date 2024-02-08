@@ -7,12 +7,13 @@
 # Written:     2017 Apr 23
 #############################################################
 
-SVER=0.0.1
+SVER=0.1.0
+OF="plugin-saltlogfiles.txt"
 
 for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
 done
 
-section_header "Supportconfig Plugin for Salt, v${SVER}"
+log_entry $OF "Supportconfig Plugin for Salt, v${SVER}"
 
-plog_files 1000 /var/log/salt/minion /var/log/venv-salt-minion.log /var/log/salt/master /var/log/salt/key /var/log/salt/broker /var/log/salt/api /var/log/salt/ssh
+log_files $OF 1000 /var/log/salt/minion /var/log/venv-salt-minion.log /var/log/salt/master /var/log/salt/key /var/log/salt/broker /var/log/salt/api /var/log/salt/ssh

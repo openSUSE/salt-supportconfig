@@ -8,32 +8,33 @@
 # Written:     2016 Oct 28
 #############################################################
 
-SVER=0.0.1
+SVER=0.1.0
+OF="plugin-saltgeneral.txt"
 
 for RCFILE in $(ls /usr/lib/supportconfig/resources/*.rc); do
     [ -s $RCFILE ] && . $RCFILE || { echo "ERROR: Initializing resource file: $RCFILE"; exit 1; }
 done
 
-section_header "Supportconfig Plugin for SaltStack, v${SVER}"
+log_entry $OF note "Supportconfig Plugin for SaltStack, v${SVER}"
 for pkg_name in "salt" "salt-master" "salt-api" "salt-minion" "venv-salt-minion" "salt-syndic" "salt-proxy"; do
     printf "#==[ Validating %-15s ]====================#\n" $pkg_name
     validate_rpm_pkg $pkg_name
 done
 
 for i in "salt-master" "salt-api" "salt-minion" "venv-salt-minion"; do
-    plugin_command "rc$i status"
+    log_cmd $OF "rc$i status"
 done
 
 if [ -e /etc/machine-id ]; then
-    pconf_files /etc/machine-id
+    conf_files $OF /etc/machine-id
 elif [ -e /var/lib/dbus/machine-id ]; then
-    pconf_files /var/lib/dbus/machine-id
+    conf_files $OF /var/lib/dbus/machine-id
 else
-    plugin_message "no machine id found"
+    log_write $OF "no machine id found"
 fi
 
 if [ -e /usr/bin/venv-salt-call ]; then
-    plugin_command "venv-salt-call --local grains.items"
+    log_cmd $OF "venv-salt-call --local grains.items"
 else
-    plugin_command "salt-call --local grains.items"
+    log_cmd $OF "salt-call --local grains.items"
 fi
